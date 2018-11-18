@@ -66,6 +66,19 @@
       author: 'Rupert Sheldrake'
     }
   };
+  const bookCovers = {
+    harry_potter_chamber_secrets: 'images/Harry_Potter_and_the_Chamber_of_Secrets.jpg',
+    the_oxygen_advantage: 'images/the_oxygen_advantage.jpg',
+    what_doesnt_kill_us: 'images/what_doesnt_kill_us.jpg',
+    temeraire_black_powder_war:
+      'https://images.contentreserve.com/ImageType-400/1191-1/01A/5D5/60/%7B01A5D560-417D-4787-9630-5204F9298F33%7DImg400.jpg',
+    mastermind: 'images/mastermind-cover-new-pipe.jpg',
+    voyage_of_jerle_shannara_ilse_witch: 'http://d202m5krfqbpi5.cloudfront.net/books/1390288763l/15560.jpg',
+    hyperfocus: 'https://img1.od-cdn.com/ImageType-400/1191-1/703/CFD/2E/%7B703CFD2E-FF46-4DF1-B3ED-8757B10C0A51%7DImg400.jpg',
+    other_minds: 'http://images.macmillan.com/folio-assets/macmillan_us_frontbookcovers_1000H/9780374227760.jpg',
+    spinning_silver: 'images/spinning_silver_by_naomi_novik.jpg',
+    dogs_that_know_when_their_owners_are_coming_home: 'images/Dogs-that-know-when-their-owners-are-coming-home.jpg'
+  };
 
   // Replace with your own code
   function unorderedList(bookKeys, books) {
@@ -73,14 +86,15 @@
     for (let i = 0; i < bookKeys.length; i++) {
       const key = bookKeys[i];
       const li = listItem(books[key]);
+      li.id = key;
       ul.appendChild(li);
     }
     return ul;
   }
 
   function listItem(obj) {
-    console.log(obj);
     const li = document.createElement('li');
+    li.classList.add('book-entry');
     const title = textRow('Title', obj.title);
     const language = textRow('Language', obj.language);
     const author = textRow('Author', obj.author);
@@ -92,27 +106,49 @@
 
   function textRow(label, value) {
     const div = document.createElement('div');
+    div.classList.add('book-attr-row');
+    // label
     const spanLabel = document.createElement('span');
+    spanLabel.classList.add('book-attr-label');
     spanLabel.innerText = label;
+    // value
     const spanValue = document.createElement('span');
+    spanValue.classList.add('book-attr-value');
     spanValue.innerText = value;
-    const colon = document.createTextNode(' : ');
+    // glue it all together
     div.appendChild(spanLabel);
-    div.appendChild(colon);
     div.appendChild(spanValue);
     return div;
+  }
+
+  function attachImage(key, path) {
+    console.log(key, path);
+    // create element to be added
+    const img = document.createElement('img');
+    img.classList.add('book-cover');
+    img.src = path;
+    const box = document.createElement('div');
+    box.classList.add('book-cover-box');
+    box.appendChild(img);
+    // find list element and add box
+    const target = document.getElementById(key);
+    console.log(target);
+    target.appendChild(box);
+  }
+
+  function addBookCovers(bookCovers) {
+    console.log(Object.keys(bookCovers));
+    const keys = Object.keys(bookCovers);
+    for (let ind = 0; ind < keys.length; ind++) {
+      console.log('KEY', keys[ind]);
+      const key = keys[ind];
+      attachImage(key, bookCovers[key]);
+    }
   }
 
   // attach to dom
   const root = document.getElementById('myapp');
   const bookList = unorderedList(bookTitles, books);
   root.appendChild(bookList);
-
-  //   <ul>
-  //     <li>
-  // <div><span></span>:<span></span></div>
-  // <div><span></span>:<span></span></div>
-  // <div><span></span>:<span></span></div>
-  //     </li>
-  // </ul>
+  addBookCovers(bookCovers);
 }
